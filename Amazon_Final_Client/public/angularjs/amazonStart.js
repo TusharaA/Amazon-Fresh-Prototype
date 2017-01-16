@@ -1,0 +1,1 @@
+var amazon= angular.module('amazon',['ngMap']);

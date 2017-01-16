@@ -1,0 +1,129 @@
+<html ng-app="amazon">
+<head>
+<title>Customer</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script src="https://code.angularjs.org/1.3.15/angular.js"></script>
+<script src="/scripts/ng-map.min.js"></script> 
+ <style>
+/* Add a gray background color and some padding to the footer */
+footer {
+	background-color: #f2f2f2;
+	padding: 25px;
+}
+
+.carousel-inner img {
+	width: 100%; /* Set width to 100% */
+	min-height: 200px;
+}
+.button {
+    background-color: #31b404; /* blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button:hover {background-color: #01DF01}
+
+.button:active {
+  background-color: #0000FF;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+/* Hide the carousel text when the screen is less than 600 pixels wide */
+@media ( max-width : 600px) {
+	.carousel-caption {
+		display: none;
+	}
+}
+h3 {text-align:center;}
+</style>
+<script src="/angularjs/amazonStart.js"></script>
+<script src="/angularjs/customerProfileController.js"></script>
+</head>
+<body ng-controller="customerProfileController">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+    <img src=".\images\logo.png" alt="Image">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/customerProfile">Home</a></li>
+        
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+         <li><a href="/logout">Logout<span class="glyphicon glyphicon-log-in"></span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+	<div align="center">
+	<h3><font color = "#6f944a"><b><%= displayProductInfo.productName %></b></font></h3>
+		<img src="<%= displayProductInfo.imgpath %>" class="img-responsive" style="width: 25%"
+			alt="Image"> ProductName: <%= displayProductInfo.productName %><br />
+		ProductId: <%= displayProductInfo.productId %><br /> 
+		ProductPrice: <%=displayProductInfo.productPrice %><br/>
+		ProductDescription: <%= displayProductInfo.productDescription %><br/> 
+		ProductQuantity: <%= displayProductInfo.productQuantity %><br/> 
+		ProductCategory: <%= displayProductInfo.productCategory %><br />
+		ProductAverageRatings:<%= displayProductInfo.productAvgRatings %><br/> 
+		Farmer:<%= displayProductInfo.farmerId %><br/>
+</div>
+
+	<hr></hr/>
+	<h3><font color = "#6f944a"><b><a href="/displayProductDetails">Reviews & Comments</a></b></font></h3>
+	<hr/>
+	<% if(displayProductInfo.customerReviews!=undefined){ %>
+		<% if(displayProductInfo.customerReviews.length > 0){ for(var i=0;i< displayProductInfo.customerReviews.length; i++){ %>
+		<b><%= displayProductInfo.customerReviews[i].firstName%> <%= displayProductInfo.customerReviews[i].lastName%><br/></b>
+		<%= displayProductInfo.customerReviews[i].Review %><br/>
+		<% for(var j=0; j< displayProductInfo.customerReviews[i].Rating  ; j++) { %>
+		<img src="/images/star.png" alt="stars" height="20" width="25">
+		<% } %>
+		<hr>
+	<% } } }%>
+	
+	<% if (displayProductInfo.AllowComment){ %>
+	<textarea name="reviewComments" rows="2" style="width: 487px;" placeholder="Leave your comments here" ng-model="reviewComments"><input type="number"/></textarea><br/>
+	
+	Rating:
+	<input type="radio" name="rating" value="1" ng-model="rating"> 1
+	<input type="radio" name="rating" value="2" ng-model="rating"> 2
+	<input type="radio" name="rating" value="3" ng-model="rating"> 3
+	<input type="radio" name="rating" value="4" ng-model="rating"> 4
+	<input type="radio" name="rating" value="5" ng-model="rating"> 5<br/>
+	</div>
+	<button name="comment" ng-click="submitReview('<%= displayProductInfo.productId %>','<%= displayProductInfo.farmerId %>');">Comment</button>
+	<% } %>
+	
+	
+</body>
+</html>

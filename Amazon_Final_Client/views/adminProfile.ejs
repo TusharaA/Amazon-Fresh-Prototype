@@ -1,0 +1,186 @@
+<html lang="en" ng-app="amazon">
+<head>
+<title>Admin Profile</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://code.angularjs.org/1.3.15/angular.js"></script>
+<script src="/scripts/ng-map.min.js"></script> 
+ <script src="/angularjs/amazonStart.js"></script>
+<script src="/angularjs/adminController.js"></script>
+
+<style>
+.categorybutton{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    width:250.0px;
+    height:150.0px;
+}
+
+.button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+/* Add a gray background color and some padding to the footer */
+footer {
+	background-color: #f2f2f2;
+	padding: 25px;
+}
+
+.carousel-inner img {
+	width: 100%; /* Set width to 100% */
+	min-height: 200px;
+}
+
+/* Hide the carousel text when the screen is less than 600 pixels wide */
+@media ( max-width : 600px) {
+	.carousel-caption {
+		display: none;
+	}
+}
+ table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#t01 {
+    width: 100%;    
+    background-color: #f1f1c1;
+}
+</style>
+</head>
+<body ng-controller="AdminController">
+	<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+     <img src=".\images\logo.png" alt="Image">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">   
+    <ul class="nav navbar-nav navbar-right">
+         <li><a href="/logout">Log Out</a></li>
+      </ul>
+       </div>
+  </div>
+</nav>
+<div class="container" style="height: 450px; width: 1350px;">
+<a href='displayFarmerList'>View All Farmers</a> &nbsp;
+<a href='displayCustomerList'>View All Customers</a> &nbsp;
+<a href='displayProductList'>View All Products</a><br/>
+<hr><h3> Information<br/>
+<button class="categorybutton button2" ng-click="farmerRequestList();">View Farmer Requests</button>
+<button class="categorybutton button2" ng-click="productRequestList();">View Product Requests</button>
+<button class="categorybutton button2" ng-click="reviewProduct();">Review Product</button>
+<button class="categorybutton button2" ng-click="searchBill();">Search for a bill</button><br/>
+<button class="categorybutton button2" ng-click="reviewCustomer();">Review Customer Account</button>
+<button class="categorybutton button2" ng-click="customerRequestList();">View Customer Requests</button>
+<hr><h3> Statistics<h3>
+<button class="categorybutton button2" ng-click="listtrips();">View All Trips</button>
+<button class="categorybutton button2" ng-click="listalltrips();">View All Trips in map</button>
+<button class="categorybutton button2" ng-click="statspercustomer();">Stats per customer</button>
+<button class="categorybutton button2" ng-click="statsperdriver();">Stats per driver</button><br/>
+<button class="categorybutton button2" ng-click="statsperarea();">Stats per area</button>
+<button class="categorybutton button2" ng-click="revenuestats();">Revenue Stats</button>
+<button class="categorybutton button2" ng-click="truckstatus1();">Modify Truck Status</button>
+
+<hr>
+
+
+
+<div ng-hide="bills"> 
+ <select ng-model="bill">
+    <option value="BILLING_ID" selected="selected">Bill_ID</option>
+    <option value="CUSTOMER_ID">Customer_ID</option>
+
+  </select>
+   <input type="text" ng-model="value" >
+  <input type="button" ng-click="billidsearch()" value="search">
+  <br><br>
+</div>
+
+
+ <div ng-hide="truckstatus">
+ <p> Truck Status</p>
+
+ <table id="t01" >
+  <tr>
+    <th>TRUCK_ID</th>
+    <th>DRIVER_ID</th>		
+    <th>DELIVERY_DATE</th>
+    <th>STATUS</th>
+   <th>Change Availability</th>
+  </tr>
+	  
+  <tr ng-repeat="search  in searchResult">
+    <td>{{search.TRUCK_ID}}</td>
+    <td>{{search.DRIVER_ID}}</td>
+    <td>{{ search.DELIVERY_DATE }}</td>	
+    <td>{{ search.STATUS }}</td>	
+    <td><input type="button" value="modify" ng-click="modifytruckstatus(search.TRUCK_ID,search.DRIVER_ID)"></td> 
+  </tr>
+  </table>
+  </div>
+    <div ng-hide="aftersearch">
+     <p> Search Result</p>
+  <table id="t01">
+  <tr>
+    <th>BILL ID</th>
+    <th>BILL DATE</th>		
+    <th>CUSTOMER ID</th>
+    <th>EXPECTED DELIVERY DATE</th>
+     <th>PRODUCT ID</th>
+     <th>DRIVER ID</th> 
+     <th>BILL AMOUNT</th>
+      <th colspan="3">SOURCE ADDRESS</th>
+      <th colspan="3">DESTINATION ADDRESS</th>
+  </tr>
+
+	  
+  <tr ng-repeat="search  in searchResult">
+    <td>{{search.BILLING_ID}}</td>
+    <td>{{search.BILL_DATE}}</td>
+    <td>{{ search.CUSTOMER_ID }}</td>	
+    <td>{{ search.EXPCTD_DELIVERY_DATE }}</td>	
+     <td>{{ search.PRODUCT_ID}}</td>
+     <td>{{ search.DRIVER_ID}}</td>
+     <td>{{ search.TOTAL_AMOUNT}}</td>
+     <td>{{ search.SOURCE_ADDRESS}}</td>
+     <td>{{ search.SOURCE_CITY}}</td>
+     <td>{{ search.SOURCE_ZIP}}</td>
+      <td>{{ search.DESTINATION_ADDRESS}}</td>
+     <td>{{ search.DESTINATION_CITY}}</td>
+     <td>{{ search.DESTINATION_ZIP}}</td>
+  </tr>
+
+</table>
+ 
+  
+  </div>
+</div>
+				</body>
+</html>
